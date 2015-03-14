@@ -2,6 +2,7 @@
 
 //Latch port allows user to change the pin used to latch CS
 void DAC_cipher(int amplitude, int latch_port);
+<<<<<<< HEAD
 
 #define SAMPLE_MAX 500
 
@@ -34,6 +35,66 @@ int main(void)
 	TA0CCTL0 = CCIE;                             // CCR0 interrupt enabled
 	TA0CCR0 = ((period*2000)/SAMPLE_MAX)-2;				  //convert period to us and divide by 1500 to get samples;  500-8 for 40ms period
 	TA0CTL = TASSEL_2 + MC_1 + TAIE + ID_3;                  // SMCLK, upmode
+=======
+void DAC_setup();
+
+#define SAMPLE_MAX 100
+
+int sample_count;
+int offset = 1150;  //934
+int amplitude = 1150;
+int m;
+
+int DAC_flag;
+
+int main(void)
+{
+	int period = 10000; // in us
+
+	WDTCTL = WDTPW + WDTHOLD;                 // Stop WDT
+	WDTCTL = WDTPW + WDTHOLD;                 // Stop watchdog timer
+
+	P2DIR |= BIT2;                            // SMCLK set out to pins
+	P2SEL |= BIT2;
+	P7DIR |= BIT4+BIT7;                       // MCLK set out to pins
+	P7SEL |= BIT7;
+
+	P5SEL |= BIT2+BIT3;                       // Port select XT2
+
+	UCSCTL6 &= ~XT2OFF;                       // Enable XT2
+	UCSCTL3 |= SELREF_5;                      // FLLref = XT2
+	UCSCTL2 |= FLLN9+FLLN5;
+											// Since LFXT1 is not used,
+											// sourcing FLL with LFXT1 can cause
+											// XT1OFFG flag to set
+	UCSCTL4 |= SELA_2;                        // ACLK=REFO,SMCLK=DCO,MCLK=DCO
+	UCSCTL1 |= DCORSEL_2;
+
+
+	// Loop until XT1,XT2 & DCO stabilizes - in this case loop until XT2 settles
+	do
+	{
+	UCSCTL7 &= ~(XT2OFFG + XT1LFOFFG + DCOFFG);
+											// Clear XT2,XT1,DCO fault flags
+	SFRIFG1 &= ~OFIFG;                      // Clear fault flags
+	}while (SFRIFG1&OFIFG);                   // Test oscillator fault flag
+
+	UCSCTL6 &= ~XT2DRIVE0;                    // Decrease XT2 Drive according to
+											  // expected frequency
+	UCSCTL4 |= SELS_5 + SELM_5;               // SMCLK=MCLK=XT2
+
+	_BIS_SR(GIE);
+
+	DAC_setup();
+
+	TA0CCTL0 = CCIE;                            // CCR0 interrupt enabled
+	TA0CTL = TASSEL_2 + MC_1 + TAIE + ID_2;     // SMCLK, upmode, /4 for 1 MHz timer clk,
+
+	//Timer resoultion = T_period/(MAX_samples*T_clk)
+	//For 1 us clock and T_period in us = period/SAMPLE_MAX
+
+	TA0CCR0 = period/SAMPLE_MAX;
+>>>>>>> origin/master
 
 	sample_count = 0;
 	DAC_flag = 0;
@@ -42,6 +103,7 @@ int main(void)
 		//DAC_flag is used to determine time to change value of DAC
 		if(DAC_flag)
 		{
+<<<<<<< HEAD
 			//slope of triangle wave is twice the amplitude divided by half the period
 			m = (2*amplitude) / (SAMPLE_MAX/2) ;
 			//for half the period the waveform, it will decrease from +A to -A
@@ -55,6 +117,12 @@ int main(void)
 				DAC_cipher((offset-amplitude)+(m*(sample_count-SAMPLE_MAX/2)),BIT0);
 			}
 			sample_count++;
+=======
+			DAC_cipher(4095/SAMPLE_MAX*sample_count, BIT0);
+
+			sample_count++;
+
+>>>>>>> origin/master
 			if(sample_count == SAMPLE_MAX)
 			{
 				sample_count = 0;
@@ -75,6 +143,23 @@ __interrupt void Timer_A (void)
 	DAC_flag = 1;
 }
 
+<<<<<<< HEAD
+=======
+void DAC_setup()
+{
+	P2DIR |= BIT0;						// Will use P2.0 to activate /CE on the DAC
+	P3SEL	= BIT0 + BIT2;	// + BIT4;	// SDI on P3.0 and SCLK on P3.2
+
+	UCB0CTL0 |= UCCKPL + UCMSB + UCMST + /* UCMODE_2 */ + UCSYNC;
+	UCB0CTL1 |= UCSSEL_2;	// UCB0 will use SMCLK as the basis for
+
+	//Divides UCB0 clk, I think @ 4 MHz CPU clk it should be fine
+	//UCB0BR0 |= 0x10;	// (low divider byte)
+	//UCB0BR1 |= 0x00;	// (high divider byte)
+	UCB0CTL1 &= ~UCSWRST;	// **Initialize USCI state machine**
+}
+
+>>>>>>> origin/master
 void DAC_cipher(int amplitude, int latch_port)
 {
 	int DAC_code;
@@ -95,7 +180,11 @@ void DAC_cipher(int amplitude, int latch_port)
 	while(!(UCTXIFG & UCB0IFG));
 
 	//wait until latch
+<<<<<<< HEAD
 	_delay_cycles(200); //170
+=======
+	_delay_cycles(25);
+>>>>>>> origin/master
 	//raise CS pin
 	P2OUT |= latch_port;
 }
