@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v4.2.1                      
 ******************************************************************************
->> Linked Wed Mar 04 23:11:04 2015
+>> Linked Fri Mar 06 16:49:24 2015
 
 OUTPUT FILE NAME:   <dac_conv.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 0000446a
+ENTRY POINT SYMBOL: "_c_int00"  address: 00004400
 
 
 MEMORY CONFIGURATION
@@ -19,8 +19,8 @@ MEMORY CONFIGURATION
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   USBRAM                00001c00   00000800  00000000  00000800  RWIX
-  RAM                   00002400   00002000  000000e4  00001f1c  RWIX
-  FLASH                 00004400   0000bb80  0000061a  0000b566  RWIX
+  RAM                   00002400   00002000  000000aa  00001f56  RWIX
+  FLASH                 00004400   0000bb80  000003d0  0000b7b0  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -96,67 +96,56 @@ section   page    origin      length       input sections
 .init_array 
 *          0    00004400    00000000     UNINITIALIZED
 
-.data      0    00002400    00000034     UNINITIALIZED
-                  00002400    00000024     main.obj (.data:duty)
-                  00002424    0000000a     main.obj (.data:period)
-                  0000242e    00000006     main.obj (.data)
-
-.TI.persistent 
-*          0    00002400    00000000     UNINITIALIZED
-
-.bss       0    00002434    00000010     UNINITIALIZED
-                  00002434    00000002     (.common:DAC_flag)
-                  00002436    00000002     (.common:duty_flag)
-                  00002438    00000002     (.common:period_flag)
-                  0000243a    00000002     (.common:sample_count)
-                  0000243c    00000002     (.common:square_compare)
-                  0000243e    00000002     (.common:triangle_compare_neg)
-                  00002440    00000002     (.common:triangle_compare_pos)
-                  00002442    00000002     (.common:wave_flag)
+.bss       0    00002400    00000006     UNINITIALIZED
+                  00002400    00000002     (.common:DAC_flag)
+                  00002402    00000002     (.common:m)
+                  00002404    00000002     (.common:sample_count)
 
 .TI.noinit 
-*          0    00002434    00000000     UNINITIALIZED
+*          0    00002400    00000000     UNINITIALIZED
+
+.data      0    00002406    00000004     UNINITIALIZED
+                  00002406    00000004     main.obj (.data)
+
+.TI.persistent 
+*          0    00002406    00000000     UNINITIALIZED
 
 .stack     0    00004360    000000a0     UNINITIALIZED
                   00004360    00000002     rts430x_lc_sd_eabi.lib : boot.obj (.stack)
                   00004362    0000009e     --HOLE--
 
 .text:_isr 
-*          0    00004400    0000008e     
-                  00004400    0000006a     main.obj (.text:_isr:PORT2)
-                  0000446a    0000001a     rts430x_lc_sd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
-                  00004484    0000000a     main.obj (.text:_isr:Timer_A)
+*          0    00004400    00000024     
+                  00004400    0000001a     rts430x_lc_sd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
+                  0000441a    0000000a     main.obj (.text:_isr:Timer_A)
 
-.text      0    0000448e    00000530     
-                  0000448e    0000013c     main.obj (.text:main)
-                  000045ca    000000d8     rts430x_lc_sd_eabi.lib : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
-                  000046a2    000000b6                            : fs_mpy.obj (.text)
-                  00004758    00000070                            : autoinit.obj (.text:_auto_init)
-                  000047c8    00000068                            : fs_toi.obj (.text)
-                  00004830    00000040                            : cpy_util.obj (.text:__memcpy_far)
-                  00004870    0000003e                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  000048ae    0000003c                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
-                  000048ea    00000038     main.obj (.text:DAC_cipher)
-                  00004922    0000002c     rts430x_lc_sd_eabi.lib : div16s.obj (.text)
-                  0000494e    00000028     main.obj (.text:DAC_setup)
-                  00004976    00000016     rts430x_lc_sd_eabi.lib : div16u.obj (.text)
-                  0000498c    00000016                            : mult16_f5hw.obj (.text)
-                  000049a2    0000000e                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
-                  000049b0    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
-                  000049b6    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  000049ba    00000004                            : exit.obj (.text:abort)
+.text      0    00004424    00000380     
+                  00004424    000000d8     rts430x_lc_sd_eabi.lib : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
+                  000044fc    000000d0     main.obj (.text:main)
+                  000045cc    00000070     rts430x_lc_sd_eabi.lib : autoinit.obj (.text:_auto_init)
+                  0000463c    00000040                            : cpy_util.obj (.text:__memcpy_far)
+                  0000467c    0000003e                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  000046ba    0000003c                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
+                  000046f6    0000003a     main.obj (.text:DAC_cipher)
+                  00004730    0000002c     rts430x_lc_sd_eabi.lib : div16s.obj (.text)
+                  0000475c    00000016                            : div16u.obj (.text)
+                  00004772    00000016                            : mult16_f5hw.obj (.text)
+                  00004788    0000000e                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
+                  00004796    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
+                  0000479c    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  000047a0    00000004                            : exit.obj (.text:abort)
 
-.cinit     0    000049be    0000005c     
-                  000049be    0000003a     (.cinit..data.load) [load image, compression = rle]
-                  000049f8    0000000c     (__TI_handler_table)
-                  00004a04    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  00004a0a    00000010     (__TI_cinit_table)
+.cinit     0    000047a4    0000002c     
+                  000047a4    0000000c     (__TI_handler_table)
+                  000047b0    0000000a     (.cinit..data.load) [load image, compression = rle]
+                  000047ba    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  000047c0    00000010     (__TI_cinit_table)
 
 RTC        0    0000ffd2    00000002     
                   0000ffd2    00000002     rts430x_lc_sd_eabi.lib : int41.obj (.int41)
 
 PORT2      0    0000ffd4    00000002     
-                  0000ffd4    00000002     main.obj (.int42)
+                  0000ffd4    00000002     rts430x_lc_sd_eabi.lib : int42.obj (.int42)
 
 TIMER2_A1 
 *          0    0000ffd6    00000002     
@@ -232,14 +221,14 @@ SYSNMI     0    0000fffc    00000002
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00004a0a records: 2, size/record: 8, table size: 16
-	.data: load addr=000049be, load size=0000003a bytes, run addr=00002400, run size=00000034 bytes, compression=rle
-	.bss: load addr=00004a04, load size=00000006 bytes, run addr=00002434, run size=00000010 bytes, compression=zero_init
+__TI_cinit_table @ 000047c0 records: 2, size/record: 8, table size: 16
+	.data: load addr=000047b0, load size=0000000a bytes, run addr=00002406, run size=00000004 bytes, compression=rle
+	.bss: load addr=000047ba, load size=00000006 bytes, run addr=00002400, run size=00000006 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 000049f8 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 000047a4 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_rle24
 	index: 2, handler: __TI_decompress_none
@@ -331,7 +320,7 @@ address    name
 00000732   ADC12MEM9
 00000733   ADC12MEM9_H
 00000732   ADC12MEM9_L
-000049ba   C$$EXIT
+000047a0   C$$EXIT
 000008c0   CBCTL0
 000008c1   CBCTL0_H
 000008c0   CBCTL0_L
@@ -360,9 +349,8 @@ address    name
 00000156   CRCRESR
 00000157   CRCRESR_H
 00000156   CRCRESR_L
-000048ea   DAC_cipher
-00002434   DAC_flag
-0000494e   DAC_setup
+000046f6   DAC_cipher
+00002400   DAC_flag
 00000510   DMA0CTL
 00000511   DMA0CTL_H
 00000510   DMA0CTL_L
@@ -593,7 +581,6 @@ address    name
 0000012e   PMMRIE
 0000012f   PMMRIE_H
 0000012e   PMMRIE_L
-00004400   PORT2
 00000158   RCCTL0
 00000159   RCCTL0_H
 00000158   RCCTL0_L
@@ -758,7 +745,7 @@ address    name
 000003e0   TB0EX0
 000003ee   TB0IV
 000003d0   TB0R
-00004484   Timer_A
+0000441a   Timer_A
 000005d0   UCA0ABCTL
 000005c6   UCA0BRW
 000005c7   UCA0BRW_H
@@ -999,16 +986,16 @@ address    name
 0000015c   WDTCTL_L
 00004400   __STACK_END
 000000a0   __STACK_SIZE
-00004a0a   __TI_CINIT_Base
-00004a1a   __TI_CINIT_Limit
-000049f8   __TI_Handler_Table_Base
-00004a04   __TI_Handler_Table_Limit
+000047c0   __TI_CINIT_Base
+000047d0   __TI_CINIT_Limit
+000047a4   __TI_Handler_Table_Base
+000047b0   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
-000049b0   __TI_ISR_TRAP
+00004796   __TI_ISR_TRAP
 00000001   __TI_args_main
-000048ae   __TI_decompress_none
-000049a2   __TI_decompress_rle24
+000046ba   __TI_decompress_none
+00004788   __TI_decompress_rle24
 00000001   __TI_exit
 0000ffd2   __TI_int41
 0000ffd4   __TI_int42
@@ -1032,38 +1019,28 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fff8   __TI_int60
 0000fffa   __TI_int61
 0000fffc   __TI_int62
-00004870   __TI_zero_init
+0000467c   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
-00004830   __memcpy_far
-00004922   __mspabi_divi
-00004976   __mspabi_divu
-000047c8   __mspabi_fixfi
-000046a2   __mspabi_mpyf
-0000498c   __mspabi_mpyi_f5hw
-00004922   __mspabi_remi
-00004976   __mspabi_remu
-00004758   _auto_init
-0000446a   _c_int00
-0000446a   _c_int00_noexit
+0000463c   __memcpy_far
+00004730   __mspabi_divi
+0000475c   __mspabi_divu
+00004772   __mspabi_mpyi_f5hw
+00004730   __mspabi_remi
+0000475c   __mspabi_remu
+000045cc   _auto_init
+00004400   _c_int00
+00004400   _c_int00_noexit
 0000fffe   _reset_vector
 00004360   _stack
-000049b6   _system_pre_init
-000049ba   abort
-00002430   amplitude
+0000479c   _system_pre_init
+000047a0   abort
+00002408   amplitude
 ffffffff   binit
-00002400   duty
-00002436   duty_flag
-0000448e   main
-0000242e   offset
-00002424   period
-00002438   period_flag
-00002432   period_state
-0000243a   sample_count
-0000243c   square_compare
-0000243e   triangle_compare_neg
-00002440   triangle_compare_pos
-00002442   wave_flag
+00002402   m
+000044fc   main
+00002406   offset
+00002404   sample_count
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1815,48 +1792,36 @@ address    name
 000023fd   USBIEPBBAY_7
 000023fe   USBIEPBCTY_7
 000023ff   USBIEPSIZXY_7
-00002400   duty
-00002424   period
-0000242e   offset
-00002430   amplitude
-00002432   period_state
-00002434   DAC_flag
-00002436   duty_flag
-00002438   period_flag
-0000243a   sample_count
-0000243c   square_compare
-0000243e   triangle_compare_neg
-00002440   triangle_compare_pos
-00002442   wave_flag
+00002400   DAC_flag
+00002402   m
+00002404   sample_count
+00002406   offset
+00002408   amplitude
 00004360   _stack
-00004400   PORT2
 00004400   __STACK_END
-0000446a   _c_int00
-0000446a   _c_int00_noexit
-00004484   Timer_A
-0000448e   main
-000046a2   __mspabi_mpyf
-00004758   _auto_init
-000047c8   __mspabi_fixfi
-00004830   __memcpy_far
-00004870   __TI_zero_init
-000048ae   __TI_decompress_none
-000048ea   DAC_cipher
-00004922   __mspabi_divi
-00004922   __mspabi_remi
-0000494e   DAC_setup
-00004976   __mspabi_divu
-00004976   __mspabi_remu
-0000498c   __mspabi_mpyi_f5hw
-000049a2   __TI_decompress_rle24
-000049b0   __TI_ISR_TRAP
-000049b6   _system_pre_init
-000049ba   C$$EXIT
-000049ba   abort
-000049f8   __TI_Handler_Table_Base
-00004a04   __TI_Handler_Table_Limit
-00004a0a   __TI_CINIT_Base
-00004a1a   __TI_CINIT_Limit
+00004400   _c_int00
+00004400   _c_int00_noexit
+0000441a   Timer_A
+000044fc   main
+000045cc   _auto_init
+0000463c   __memcpy_far
+0000467c   __TI_zero_init
+000046ba   __TI_decompress_none
+000046f6   DAC_cipher
+00004730   __mspabi_divi
+00004730   __mspabi_remi
+0000475c   __mspabi_divu
+0000475c   __mspabi_remu
+00004772   __mspabi_mpyi_f5hw
+00004788   __TI_decompress_rle24
+00004796   __TI_ISR_TRAP
+0000479c   _system_pre_init
+000047a0   C$$EXIT
+000047a0   abort
+000047a4   __TI_Handler_Table_Base
+000047b0   __TI_Handler_Table_Limit
+000047c0   __TI_CINIT_Base
+000047d0   __TI_CINIT_Limit
 0000ffd2   __TI_int41
 0000ffd4   __TI_int42
 0000ffd6   __TI_int43
@@ -1886,4 +1851,4 @@ ffffffff   binit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 
-[815 symbols]
+[803 symbols]
