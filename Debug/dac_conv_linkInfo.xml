@@ -2,7 +2,7 @@
 <link_info>
    <banner>MSP430 Linker PC v4.2.1</banner>
    <copyright>Copyright (c) 2003-2013 Texas Instruments Incorporated</copyright>
-   <link_time>0x550492a4</link_time>
+   <link_time>0x55051874</link_time>
    <link_errors>0x0</link_errors>
    <output_file>dac_conv.out</output_file>
    <entry_point>
